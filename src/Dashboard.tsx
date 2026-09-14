@@ -18,10 +18,10 @@ export function Dashboard({ onSelectChapter }: DashboardProps) {
     {
       id: 'chapter-2',
       title: 'Chapter 2: Sense the World',
-      description: 'Introduce buttons and sensors. Make your robot react to touch and light.',
+      description: 'Build an automatic gate! Use an IR sensor and a servo motor to sense objects and react.',
       icon: <Settings className="w-12 h-12 text-blue-500" />,
       color: 'bg-blue-100',
-      status: 'Locked',
+      status: 'Start Now',
     },
     {
       id: 'chapter-3',
@@ -48,11 +48,13 @@ export function Dashboard({ onSelectChapter }: DashboardProps) {
       </header>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {chapters.map((chapter) => (
+        {chapters.map((chapter) => {
+          const isUnlocked = chapter.id === 'chapter-1' || chapter.id === 'chapter-2';
+          return (
           <div 
             key={chapter.id}
-            className={`doodle-card p-6 flex flex-col h-full ${chapter.id === 'chapter-1' ? 'cursor-pointer' : 'opacity-75 grayscale'}`}
-            onClick={() => chapter.id === 'chapter-1' && onSelectChapter(chapter.id)}
+            className={`doodle-card p-6 flex flex-col h-full ${isUnlocked ? 'cursor-pointer' : 'opacity-75 grayscale'}`}
+            onClick={() => isUnlocked && onSelectChapter(chapter.id)}
           >
             <div className={`w-20 h-20 ${chapter.color} rounded-xl border-4 border-black flex items-center justify-center mb-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] mx-auto bg-white`}>
               {chapter.icon}
@@ -63,7 +65,7 @@ export function Dashboard({ onSelectChapter }: DashboardProps) {
               {chapter.description}
             </p>
             
-            {chapter.id === 'chapter-1' ? (
+            {isUnlocked ? (
               <button className="doodle-button w-full flex items-center justify-center gap-2 group">
                 {chapter.status}
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -74,7 +76,8 @@ export function Dashboard({ onSelectChapter }: DashboardProps) {
               </div>
             )}
           </div>
-        ))}
+          );
+        })}
       </div>
       
       <div className="mt-16 doodle-card p-8 bg-[#6BCB77] border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] flex flex-col md:flex-row items-center gap-8 text-black rounded-2xl">
