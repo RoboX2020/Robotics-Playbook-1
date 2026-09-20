@@ -2,7 +2,7 @@ import React from 'react';
 import { ArrowLeft, Wifi, Zap, Cpu, Activity, Wrench, CheckSquare, AlertTriangle, Code } from 'lucide-react';
 import { CodeBlock } from './CodeBlock';
 
-const codeChapter3 = \`/*Nodemcu ESP8266 WIFI control car with the New Blynk app.*/
+const codeChapter3 = `/*Nodemcu ESP8266 WIFI control car with the New Blynk app.*/
 
 // Include the library files
 #define BLYNK_PRINT Serial
@@ -116,7 +116,7 @@ void carStop() {
   digitalWrite(IN2, LOW);
   digitalWrite(IN3, LOW);
   digitalWrite(IN4, LOW);
-}\`;
+}`;
 
 interface Chapter3Props {
   onBack: () => void;
