@@ -157,6 +157,142 @@ export function Chapter3({ onBack }: Chapter3Props) {
         </div>
       </section>
 
+      {/* Code Section */}
+      <section className="mb-12">
+        <h2 className="text-2xl font-black mb-6 uppercase flex items-center gap-2">
+          <Code className="w-6 h-6 text-[#4D96FF]" /> The Code
+        </h2>
+        <div className="doodle-card p-0 bg-[#1A1A1A] text-white overflow-hidden shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] flex flex-col">
+          <div className="bg-black p-4 border-b-4 border-black flex items-center justify-between">
+            <div className="flex gap-2">
+              <div className="w-4 h-4 rounded-full bg-[#FF6B6B] border-2 border-black"></div>
+              <div className="w-4 h-4 rounded-full bg-[#FFD700] border-2 border-black"></div>
+              <div className="w-4 h-4 rounded-full bg-[#6BCB77] border-2 border-black"></div>
+            </div>
+            <span className="text-[10px] px-2 py-1 bg-white/10 rounded border border-white/20 font-bold uppercase tracking-widest hidden sm:inline-block">wifi_car.ino</span>
+          </div>
+          <div className="p-4 overflow-x-auto font-mono text-sm leading-relaxed bg-[#1A1A1A] text-gray-300">
+            <pre className="m-0 p-0">
+{`/*Nodemcu ESP8266 WIFI control car with the New Blynk app.*/
+
+// Include the library files
+#define BLYNK_PRINT Serial
+#include <ESP8266WiFi.h>
+#include <BlynkSimpleEsp8266.h>
+
+// Define the motor pins
+#define ENA D0
+#define IN1 D1
+#define IN2 D2
+#define IN3 D3
+#define IN4 D4
+#define ENB D5
+
+// Variables for the Blynk widget values
+int x = 50;
+int y = 50;
+int Speed;
+
+char auth[] = ""; //Enter your Blynk auth token
+char ssid[] = ""; //Enter your WIFI name
+char pass[] = ""; //Enter your WIFI passowrd
+
+void setup() {
+  Serial.begin(9600);
+  //Set the motor pins as output pins
+  pinMode(ENA, OUTPUT);
+  pinMode(IN1, OUTPUT);
+  pinMode(IN2, OUTPUT);
+  pinMode(IN3, OUTPUT);
+  pinMode(IN4, OUTPUT);
+  pinMode(ENB, OUTPUT);
+
+  // Initialize the Blynk library
+  Blynk.begin(auth, ssid, pass, "blynk.cloud", 80);
+}
+
+// Get the joystick values
+BLYNK_WRITE(V0) {
+  x = param[0].asInt();
+}
+// Get the joystick values
+BLYNK_WRITE(V1) {
+  y = param[0].asInt();
+}
+//Get the slider values
+BLYNK_WRITE(V2) {
+  Speed = param.asInt();
+}
+
+// Check these values using the IF condition
+void smartcar() {
+  if (y > 70) {
+    carForward();
+    Serial.println("carForward");
+  } else if (y < 30) {
+    carBackward();
+    Serial.println("carBackward");
+  } else if (x < 30) {
+    carLeft();
+    Serial.println("carLeft");
+  } else if (x > 70) {
+    carRight();
+    Serial.println("carRight");
+  } else if (x < 70 && x > 30 && y < 70 && y > 30) {
+    carStop();
+    Serial.println("carstop");
+  }
+}
+
+void loop() {
+  Blynk.run();// Run the blynk function
+  smartcar();// Call the main function
+}
+
+/**************Motor movement functions*****************/
+void carForward() {
+  analogWrite(ENA, Speed);
+  analogWrite(ENB, Speed);
+  digitalWrite(IN1, LOW);
+  digitalWrite(IN2, HIGH);
+  digitalWrite(IN3, HIGH);
+  digitalWrite(IN4, LOW);
+}
+void carBackward() {
+  analogWrite(ENA, Speed);
+  analogWrite(ENB, Speed);
+  digitalWrite(IN1, HIGH);
+  digitalWrite(IN2, LOW);
+  digitalWrite(IN3, LOW);
+  digitalWrite(IN4, HIGH);
+}
+void carLeft() {
+  analogWrite(ENA, Speed);
+  analogWrite(ENB, Speed);
+  digitalWrite(IN1, HIGH);
+  digitalWrite(IN2, LOW);
+  digitalWrite(IN3, HIGH);
+  digitalWrite(IN4, LOW);
+}
+void carRight() {
+  analogWrite(ENA, Speed);
+  analogWrite(ENB, Speed);
+  digitalWrite(IN1, LOW);
+  digitalWrite(IN2, HIGH);
+  digitalWrite(IN3, LOW);
+  digitalWrite(IN4, HIGH);
+}
+void carStop() {
+  digitalWrite(IN1, LOW);
+  digitalWrite(IN2, LOW);
+  digitalWrite(IN3, LOW);
+  digitalWrite(IN4, LOW);
+}`}
+            </pre>
+          </div>
+        </div>
+      </section>
+
       {/* Student Assignments */}
       <section className="mb-12">
         <h2 className="text-2xl font-black mb-6 uppercase flex items-center gap-2">

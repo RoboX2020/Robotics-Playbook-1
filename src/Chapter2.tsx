@@ -283,31 +283,34 @@ export function Chapter2({ onBack }: Chapter2Props) {
                 ))}
               </div>
               <div className="flex-1">
-                <pre className="m-0 p-0 overflow-visible"><span className="text-[#FF6B6B]">#include</span> <span className="text-[#6BCB77]">&lt;Servo.h&gt;</span>
-{'\n'}
-<span className="text-[#FF6B6B]">#define</span> <span className="text-[#4D96FF]">Servopin</span> <span className="text-purple-400">3</span>
-<span className="text-[#FF6B6B]">#define</span> <span className="text-[#4D96FF]">Sensorpin</span> <span className="text-purple-400">2</span>
-{'\n'}
-<span className="text-[#4D96FF]">Servo</span> gateServo;
-{'\n'}
-<span className="text-[#FF6B6B]">void</span> <span className="text-[#4D96FF]">setup</span>() {'{'}
-  <span className="text-[#4D96FF]">Serial</span>.<span className="text-[#FFD700]">begin</span>(<span className="text-purple-400">9600</span>);
-  gateServo.<span className="text-[#FFD700]">attach</span>(Servopin);
-  <span className="text-[#FFD700]">pinMode</span>(Sensorpin, <span className="text-[#6BCB77]">INPUT</span>);
-  gateServo.<span className="text-[#FFD700]">write</span>(<span className="text-purple-400">160</span>);        <span className="text-gray-500">// Start position: closed</span>
-{'}'}
-{'\n'}
-<span className="text-[#FF6B6B]">void</span> <span className="text-[#4D96FF]">loop</span>() {'{'}
-  <span className="text-[#FF6B6B]">bool</span> value = <span className="text-[#FFD700]">digitalRead</span>(Sensorpin);
-  <span className="text-[#4D96FF]">Serial</span>.<span className="text-[#FFD700]">println</span>(value);
-{'\n'}
-  <span className="text-[#FF6B6B]">if</span> (value == <span className="text-purple-400">0</span>) {'{'}
-    gateServo.<span className="text-[#FFD700]">write</span>(<span className="text-purple-400">90</span>);       <span className="text-gray-500">// Open the gate</span>
-    <span className="text-[#FFD700]">delay</span>(<span className="text-purple-400">1000</span>);             <span className="text-gray-500">// Wait for 1 second</span>
-  {'}'} <span className="text-[#FF6B6B]">else</span> {'{'}
-    gateServo.<span className="text-[#FFD700]">write</span>(<span className="text-purple-400">160</span>);      <span className="text-gray-500">// Close the gate</span>
-  {'}'}
-{'}'}</pre>
+                <pre className="m-0 p-0 overflow-visible text-gray-300">
+{`#include <Servo.h>
+#define Servopin 3
+#define Sensorpin 2
+
+Servo gateServo;
+
+void setup() {
+  Serial.begin(9600);
+  gateServo.attach(Servopin);
+  pinMode(Sensorpin, INPUT);
+  gateServo.write(160);
+}
+
+void loop() {
+  bool value = digitalRead(Sensorpin);
+  Serial.println(value);
+
+  if (value == 0) {
+    gateServo.write(90);
+    delay(5);
+    gateServo.write(160);
+    delay(5);
+  } else {
+    gateServo.write(160);
+  }
+}`}
+                </pre>
               </div>
             </div>
           </div>
