@@ -192,7 +192,7 @@ export function Chapter2({ onBack }: Chapter2Props) {
                   ['IR Sensor OUT', 'Digital Pin 2', 'Sends HIGH/LOW reading to Arduino'],
                   ['Servo Red Wire', '5V', 'Provides servo power (SG90)'],
                   ['Servo Brown/Black', 'GND', 'Servo ground — must connect to Arduino GND'],
-                  ['Servo Orange/Yellow', 'Digital Pin 9', 'Receives the servo control signal'],
+                  ['Servo Orange/Yellow', 'Digital Pin 3', 'Receives the servo control signal'],
                 ].map(([terminal, pin, desc], i) => (
                   <tr key={i} className={`border-t-2 border-black ${i % 2 === 0 ? 'bg-blue-50' : 'bg-white'}`}>
                     <td className="p-3 font-bold">{terminal}</td>
@@ -204,81 +204,13 @@ export function Chapter2({ onBack }: Chapter2Props) {
             </table>
           </div>
 
-          {/* SVG CIRCUIT DIAGRAM */}
-          <div className="bg-white border-4 border-black rounded-xl p-6 md:p-8 relative min-h-[350px] flex items-center justify-center">
-            <svg viewBox="0 0 520 280" className="w-full max-w-2xl drop-shadow-md">
-              {/* Arduino board */}
-              <rect x="20" y="60" width="120" height="160" rx="12" fill="#0ea5e9" stroke="#000" strokeWidth="4" />
-              <text x="40" y="145" fontFamily="monospace" fontWeight="bold" fill="#fff" fontSize="20">UNO</text>
-              <text x="40" y="165" fontFamily="monospace" fontWeight="bold" fill="#fff" fontSize="10">R3</text>
-
-              {/* Arduino pins */}
-              <circle cx="130" cy="90" r="5" fill="#000" />
-              <text x="85" y="95" fontSize="10" fontWeight="bold" fill="#fff">5V</text>
-
-              <circle cx="130" cy="115" r="5" fill="#000" />
-              <text x="85" y="120" fontSize="10" fontWeight="bold" fill="#fff">GND</text>
-
-              <circle cx="130" cy="145" r="5" fill="#000" />
-              <text x="85" y="150" fontSize="10" fontWeight="bold" fill="#fff">Pin 2</text>
-
-              <circle cx="130" cy="185" r="5" fill="#000" />
-              <text x="85" y="190" fontSize="10" fontWeight="bold" fill="#fff">Pin 9</text>
-
-              {/* IR Sensor module */}
-              <rect x="280" y="30" width="100" height="80" rx="8" fill="#a855f7" stroke="#000" strokeWidth="4" />
-              <text x="293" y="65" fontFamily="monospace" fontWeight="bold" fill="#fff" fontSize="12">IR Sensor</text>
-              <text x="303" y="82" fontFamily="monospace" fill="#fff" fontSize="9">Module</text>
-              {/* IR emitter/receiver dots */}
-              <circle cx="310" cy="100" r="4" fill="#ef4444" stroke="#000" strokeWidth="2" />
-              <circle cx="340" cy="100" r="4" fill="#1e293b" stroke="#000" strokeWidth="2" />
-
-              {/* IR sensor labels */}
-              <text x="285" y="25" fontSize="9" fontWeight="bold" fill="#666">VCC  GND  OUT</text>
-              <circle cx="295" cy="30" r="3" fill="#ef4444" />
-              <circle cx="320" cy="30" r="3" fill="#000" />
-              <circle cx="350" cy="30" r="3" fill="#4D96FF" />
-
-              {/* Servo motor */}
-              <rect x="280" y="160" width="100" height="80" rx="8" fill="#f97316" stroke="#000" strokeWidth="4" />
-              <text x="295" y="200" fontFamily="monospace" fontWeight="bold" fill="#fff" fontSize="12">SERVO</text>
-              <text x="303" y="218" fontFamily="monospace" fill="#fff" fontSize="9">SG90</text>
-              {/* Servo horn */}
-              <line x1="370" y1="200" x2="400" y2="200" stroke="#000" strokeWidth="4" strokeLinecap="round" />
-              <circle cx="370" cy="200" r="6" fill="#fff" stroke="#000" strokeWidth="3" />
-
-              {/* Servo labels */}
-              <text x="282" y="155" fontSize="9" fontWeight="bold" fill="#666">RED  BLK  SIG</text>
-              <circle cx="293" cy="160" r="3" fill="#ef4444" />
-              <circle cx="320" cy="160" r="3" fill="#000" />
-              <circle cx="350" cy="160" r="3" fill="#f59e0b" />
-
-              {/* Wires — 5V (red) */}
-              <path d="M130 90 Q200 50 295 30" stroke="#ef4444" strokeWidth="3" fill="none" strokeDasharray="6,3" />
-              <path d="M130 90 Q200 130 293 160" stroke="#ef4444" strokeWidth="3" fill="none" strokeDasharray="6,3" />
-
-              {/* Wires — GND (black) */}
-              <path d="M130 115 Q210 70 320 30" stroke="#000" strokeWidth="3" fill="none" />
-              <path d="M130 115 Q210 145 320 160" stroke="#000" strokeWidth="3" fill="none" />
-
-              {/* Wire — IR OUT to Pin 2 (blue) */}
-              <path d="M130 145 Q220 120 350 30" stroke="#4D96FF" strokeWidth="3" fill="none" strokeDasharray="8,4" />
-
-              {/* Wire — Servo SIG to Pin 9 (yellow) */}
-              <path d="M130 185 Q220 200 350 160" stroke="#f59e0b" strokeWidth="3" fill="none" strokeDasharray="8,4" />
-
-              {/* Legend */}
-              <rect x="410" y="40" width="100" height="100" rx="6" fill="#f8fafc" stroke="#000" strokeWidth="2" />
-              <text x="425" y="58" fontSize="10" fontWeight="bold">Legend</text>
-              <line x1="420" y1="72" x2="440" y2="72" stroke="#ef4444" strokeWidth="3" strokeDasharray="4,2" />
-              <text x="445" y="76" fontSize="9">5V Power</text>
-              <line x1="420" y1="92" x2="440" y2="92" stroke="#000" strokeWidth="3" />
-              <text x="445" y="96" fontSize="9">Ground</text>
-              <line x1="420" y1="112" x2="440" y2="112" stroke="#4D96FF" strokeWidth="3" strokeDasharray="6,3" />
-              <text x="445" y="116" fontSize="9">IR OUT</text>
-              <line x1="420" y1="132" x2="440" y2="132" stroke="#f59e0b" strokeWidth="3" strokeDasharray="6,3" />
-              <text x="445" y="136" fontSize="9">Servo SIG</text>
-            </svg>
+          {/* CIRCUIT DIAGRAM */}
+          <div className="bg-white border-4 border-black rounded-xl p-6 md:p-8 relative flex items-center justify-center">
+            <img 
+              src="/chapter2-diagram.png" 
+              alt="Circuit Diagram" 
+              className="w-full max-w-2xl rounded-xl border-4 border-black"
+            />
           </div>
         </div>
       </section>
@@ -353,32 +285,28 @@ export function Chapter2({ onBack }: Chapter2Props) {
               <div className="flex-1">
                 <pre className="m-0 p-0 overflow-visible"><span className="text-[#FF6B6B]">#include</span> <span className="text-[#6BCB77]">&lt;Servo.h&gt;</span>
 {'\n'}
-<span className="text-[#FF6B6B]">const int</span> irSensorPin = <span className="text-purple-400">2</span>;   <span className="text-gray-500">// IR sensor OUT → digital pin 2</span>
-<span className="text-[#FF6B6B]">const int</span> servoPin = <span className="text-purple-400">9</span>;      <span className="text-gray-500">// Servo signal → digital pin 9</span>
+<span className="text-[#FF6B6B]">#define</span> <span className="text-[#4D96FF]">Servopin</span> <span className="text-purple-400">3</span>
+<span className="text-[#FF6B6B]">#define</span> <span className="text-[#4D96FF]">Sensorpin</span> <span className="text-purple-400">2</span>
 {'\n'}
 <span className="text-[#4D96FF]">Servo</span> gateServo;
 {'\n'}
-<span className="text-gray-500">// Most IR modules output LOW when object detected.</span>
-<span className="text-gray-500">// Change LOW to HIGH if yours works backwards.</span>
-<span className="text-[#FF6B6B]">const int</span> objectDetectedState = <span className="text-[#6BCB77]">LOW</span>;
-{'\n'}
 <span className="text-[#FF6B6B]">void</span> <span className="text-[#4D96FF]">setup</span>() {'{'}
-  <span className="text-[#FFD700]">pinMode</span>(irSensorPin, <span className="text-[#6BCB77]">INPUT</span>);
-  gateServo.<span className="text-[#FFD700]">attach</span>(servoPin);
-  gateServo.<span className="text-[#FFD700]">write</span>(<span className="text-purple-400">0</span>);        <span className="text-gray-500">// Start position: closed</span>
-  <span className="text-[#FFD700]">delay</span>(<span className="text-purple-400">500</span>);
+  <span className="text-[#4D96FF]">Serial</span>.<span className="text-[#FFD700]">begin</span>(<span className="text-purple-400">9600</span>);
+  gateServo.<span className="text-[#FFD700]">attach</span>(Servopin);
+  <span className="text-[#FFD700]">pinMode</span>(Sensorpin, <span className="text-[#6BCB77]">INPUT</span>);
+  gateServo.<span className="text-[#FFD700]">write</span>(<span className="text-purple-400">160</span>);        <span className="text-gray-500">// Start position: closed</span>
 {'}'}
 {'\n'}
 <span className="text-[#FF6B6B]">void</span> <span className="text-[#4D96FF]">loop</span>() {'{'}
-  <span className="text-[#FF6B6B]">int</span> sensorValue = <span className="text-[#FFD700]">digitalRead</span>(irSensorPin);
+  <span className="text-[#FF6B6B]">bool</span> value = <span className="text-[#FFD700]">digitalRead</span>(Sensorpin);
+  <span className="text-[#4D96FF]">Serial</span>.<span className="text-[#FFD700]">println</span>(value);
 {'\n'}
-  <span className="text-[#FF6B6B]">if</span> (sensorValue == objectDetectedState) {'{'}
-    gateServo.<span className="text-[#FFD700]">write</span>(<span className="text-purple-400">90</span>);     <span className="text-gray-500">// Open the gate</span>
-    <span className="text-[#FFD700]">delay</span>(<span className="text-purple-400">1000</span>);             <span className="text-gray-500">// Hold 1 second</span>
+  <span className="text-[#FF6B6B]">if</span> (value == <span className="text-purple-400">0</span>) {'{'}
+    gateServo.<span className="text-[#FFD700]">write</span>(<span className="text-purple-400">90</span>);       <span className="text-gray-500">// Open the gate</span>
+    <span className="text-[#FFD700]">delay</span>(<span className="text-purple-400">1000</span>);             <span className="text-gray-500">// Wait for 1 second</span>
   {'}'} <span className="text-[#FF6B6B]">else</span> {'{'}
-    gateServo.<span className="text-[#FFD700]">write</span>(<span className="text-purple-400">0</span>);      <span className="text-gray-500">// Close the gate</span>
+    gateServo.<span className="text-[#FFD700]">write</span>(<span className="text-purple-400">160</span>);      <span className="text-gray-500">// Close the gate</span>
   {'}'}
-  <span className="text-[#FFD700]">delay</span>(<span className="text-purple-400">50</span>);                 <span className="text-gray-500">// Stable reading delay</span>
 {'}'}</pre>
               </div>
             </div>
