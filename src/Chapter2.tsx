@@ -1,5 +1,33 @@
 import React, { useState } from 'react';
 import { ArrowLeft, Eye, Cpu, Radio, RotateCw, Code, CheckSquare, Play, Terminal, AlertTriangle, Wrench, ShieldCheck, HelpCircle, Cable, Zap } from 'lucide-react';
+import { CodeBlock } from './CodeBlock';
+
+const codeChapter2 = `#include <Servo.h>
+#define Servopin 3
+#define Sensorpin 2
+
+Servo gateServo;
+
+void setup() {
+  Serial.begin(9600);
+  gateServo.attach(Servopin);
+  pinMode(Sensorpin, INPUT);
+  gateServo.write(160);
+}
+
+void loop() {
+  bool value = digitalRead(Sensorpin);
+  Serial.println(value);
+
+  if (value == 0) {
+    gateServo.write(90);
+    delay(5);
+    gateServo.write(160);
+    delay(5);
+  } else {
+    gateServo.write(160);
+  }
+}`;
 
 interface Chapter2Props {
   onBack: () => void;
@@ -254,89 +282,7 @@ export function Chapter2({ onBack }: Chapter2Props) {
           </a>
         </div>
 
-        <div className="doodle-card p-0 bg-[#1A1A1A] text-white overflow-hidden shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] flex flex-col">
-          {/* Header */}
-          <div className="bg-black p-4 border-b-4 border-black flex items-center justify-between">
-            <div className="flex gap-2">
-              <div className="w-4 h-4 rounded-full bg-[#FF6B6B] border-2 border-black"></div>
-              <div className="w-4 h-4 rounded-full bg-[#FFD700] border-2 border-black"></div>
-              <div className="w-4 h-4 rounded-full bg-[#6BCB77] border-2 border-black"></div>
-            </div>
-            <div className="flex gap-4 items-center">
-              <span className="text-[10px] px-2 py-1 bg-white/10 rounded border border-white/20 font-bold uppercase tracking-widest hidden sm:inline-block">auto_gate.ino</span>
-              <button
-                onClick={handleRunCode}
-                disabled={isRunning}
-                className="flex items-center gap-2 bg-[#6BCB77] text-black px-3 py-1.5 rounded font-black text-xs uppercase hover:bg-green-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed border-2 border-black shadow-[2px_2px_0px_0px_rgba(255,255,255,0.2)] active:translate-y-[1px] active:shadow-none"
-              >
-                <Play className="w-3 h-3 fill-black" /> {isRunning ? 'Running...' : 'Run / Upload'}
-              </button>
-            </div>
-          </div>
-
-          {/* Code Area */}
-          <div className="p-4 overflow-x-auto border-b-4 border-black font-mono text-sm leading-relaxed bg-[#1A1A1A] relative">
-            <div className="flex">
-              <div className="text-gray-600 text-right select-none pr-4 border-r-2 border-gray-800 flex flex-col mr-4">
-                {Array.from({ length: 26 }).map((_, i) => (
-                  <span key={i + 1}>{i + 1}</span>
-                ))}
-              </div>
-              <div className="flex-1">
-                <pre className="m-0 p-0 overflow-visible text-gray-300">
-{`#include <Servo.h>
-#define Servopin 3
-#define Sensorpin 2
-
-Servo gateServo;
-
-void setup() {
-  Serial.begin(9600);
-  gateServo.attach(Servopin);
-  pinMode(Sensorpin, INPUT);
-  gateServo.write(160);
-}
-
-void loop() {
-  bool value = digitalRead(Sensorpin);
-  Serial.println(value);
-
-  if (value == 0) {
-    gateServo.write(90);
-    delay(5);
-    gateServo.write(160);
-    delay(5);
-  } else {
-    gateServo.write(160);
-  }
-}`}
-                </pre>
-              </div>
-            </div>
-          </div>
-
-          {/* Terminal Area */}
-          <div className="bg-black p-4 font-mono text-xs h-48 overflow-y-auto">
-            <div className="flex items-center gap-2 text-gray-500 mb-3 border-b border-gray-800 pb-2">
-              <Terminal className="w-4 h-4" />
-              <span className="uppercase font-bold tracking-widest text-[10px]">Terminal Output</span>
-            </div>
-            {terminalOutput.length === 0 ? (
-              <div className="text-gray-600 flex items-center h-full justify-center pb-8 opacity-50">
-                Click "Run / Upload" to simulate compiling and flashing the Arduino.
-              </div>
-            ) : (
-              <div className="flex flex-col gap-1.5">
-                {terminalOutput.map((line, idx) => (
-                  <div key={idx} className={`${line.includes('Error') ? 'text-red-400' : line.includes('successful') || line.includes('Gate system') ? 'text-[#6BCB77]' : 'text-gray-300'}`}>
-                    {line}
-                  </div>
-                ))}
-                {isRunning && <div className="text-gray-500 animate-pulse mt-1">_</div>}
-              </div>
-            )}
-          </div>
-        </div>
+        <CodeBlock code={codeChapter2} />
       </section>
 
       {/* ───────── HOW THE CODE WORKS ───────── */}
