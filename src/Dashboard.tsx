@@ -29,7 +29,7 @@ export function Dashboard({ onSelectChapter }: DashboardProps) {
       description: 'Motors and movement. It is time to get those wheels spinning.',
       icon: <Star className="w-12 h-12 text-pink-500" />,
       color: 'bg-pink-100',
-      status: 'Locked',
+      status: 'Start Now',
     }
   ];
 
@@ -49,7 +49,7 @@ export function Dashboard({ onSelectChapter }: DashboardProps) {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {chapters.map((chapter) => {
-          const isUnlocked = chapter.id === 'chapter-1' || chapter.id === 'chapter-2';
+          const isUnlocked = true;
           return (
           <div 
             key={chapter.id}
