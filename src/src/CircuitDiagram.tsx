@@ -1,3 +1,0 @@
-export function CircuitDiagram({number,connections}:{number:number;connections:string[]}){
-return <figure className="my-6 p-3 border-4 border-black rounded-xl bg-white"><figcaption className="font-black mb-4 uppercase">Chapter {number}: circuit wiring</figcaption><img src={`/circuits/chapter${number}.svg`} alt={`Drawn chapter ${number} wiring with each component terminal and wire labelled`} className="w-full max-w-lg mx-auto"/><details className="mt-4"><summary className="font-bold cursor-pointer py-3">Text connection key</summary><ul className="list-disc pl-5 text-sm space-y-3">{connections.map((c,i)=><li key={i}>{c}</li>)}</ul></details></figure>;
-}
