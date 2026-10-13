@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { ClipboardCopy, Check } from 'lucide-react';
 
-export function CodeBlock({ code }: { code: string }) {
+export function CodeBlock({ code, downloadHref }: { code: string; downloadHref?: string }) {
   const [copied, setCopied] = useState(false);
+  const [error, setError] = useState(false);
 
-  const handleCopy = () => {
-    navigator.clipboard.writeText(code);
+  const handleCopy = async () => {
+    try { await navigator.clipboard.writeText(code); setError(false); } catch { setError(true); return; }
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -13,11 +14,11 @@ export function CodeBlock({ code }: { code: string }) {
   const lines = code.trim().split('\n');
 
   return (
-    <div className="relative bg-[#f8f9fa] rounded-lg border border-gray-200 shadow-sm font-mono text-[13px] sm:text-sm my-6 flex text-gray-800">
+    <><div className="relative bg-[#f8f9fa] rounded-lg border border-gray-200 shadow-sm font-mono text-[13px] sm:text-sm my-6 flex text-gray-800">
       <button 
         onClick={handleCopy} 
         className="absolute top-2 right-2 p-2 bg-white rounded border border-gray-200 hover:bg-gray-50 transition-colors shadow-sm z-10" 
-        title="Copy code"
+        title={error ? "Copy failed. Select code manually." : "Copy code"} aria-label={error ? "Copy failed. Select code manually." : copied ? "Code copied" : "Copy code"}
       >
         {copied ? <Check className="w-4 h-4 text-green-600" /> : <ClipboardCopy className="w-4 h-4 text-gray-600" />}
       </button>
@@ -31,6 +32,6 @@ export function CodeBlock({ code }: { code: string }) {
           {code.trim()}
         </pre>
       </div>
-    </div>
+    </div>{downloadHref && <a href={downloadHref} download className="doodle-button inline-block text-sm mb-6">Download .ino sketch</a>}</>
   );
 }
