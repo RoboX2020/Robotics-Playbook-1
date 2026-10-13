@@ -1,32 +1,20 @@
+import { CodeBlock } from './CodeBlock';
+import { CircuitDiagram } from './CircuitDiagram';
+import { circuits } from './circuits';
 import React, { useState } from 'react';
 import { ArrowLeft, Battery, Cpu, Lightbulb, Zap, Activity, Code, PenTool, CheckSquare, Play, Terminal } from 'lucide-react';
+
+export const codeChapter1 = `void setup() { pinMode(13, OUTPUT); }
+void loop() {
+  digitalWrite(13, HIGH); delay(1000);
+  digitalWrite(13, LOW); delay(1000);
+}`;
 
 interface Chapter1Props {
   onBack: () => void;
 }
 
 export function Chapter1({ onBack }: Chapter1Props) {
-  const [terminalOutput, setTerminalOutput] = useState<string[]>([]);
-  const [isRunning, setIsRunning] = useState(false);
-
-  const handleRunCode = () => {
-    if (isRunning) return;
-    setIsRunning(true);
-    setTerminalOutput(['$ arduino-cli compile --fqbn arduino:avr:uno blink.ino', 'Compiling sketch...']);
-    
-    setTimeout(() => {
-      setTerminalOutput(prev => [...prev, 'Sketch uses 924 bytes (2%) of program storage space.', 'Global variables use 9 bytes (0%) of dynamic memory.']);
-    }, 1000);
-
-    setTimeout(() => {
-      setTerminalOutput(prev => [...prev, '$ arduino-cli upload -p /dev/ttyACM0 --fqbn arduino:avr:uno blink.ino', 'Connecting to programmer...', 'Uploading...']);
-    }, 2000);
-
-    setTimeout(() => {
-      setTerminalOutput(prev => [...prev, 'SIMULATION ONLY: upload example complete.', 'avrdude done.  Thank you.', '', 'A real LED only blinks after an actual hardware upload.']);
-      setIsRunning(false);
-    }, 3500);
-  };
 
   return (
     <div className="max-w-4xl mx-auto p-4 md:p-8 pb-24">
@@ -226,79 +214,9 @@ export function Chapter1({ onBack }: Chapter1Props) {
            </a>
         </div>
 
-        <div className="doodle-card p-0 bg-[#1A1A1A] text-white overflow-hidden shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] flex flex-col">
-          {/* Header */}
-          <div className="bg-black p-4 border-b-4 border-black flex items-center justify-between">
-             <div className="flex gap-2">
-               <div className="w-4 h-4 rounded-full bg-[#FF6B6B] border-2 border-black"></div>
-               <div className="w-4 h-4 rounded-full bg-[#FFD700] border-2 border-black"></div>
-               <div className="w-4 h-4 rounded-full bg-[#6BCB77] border-2 border-black"></div>
-             </div>
-             <div className="flex gap-4 items-center">
-               <span className="text-[10px] px-2 py-1 bg-white/10 rounded border border-white/20 font-bold uppercase tracking-widest hidden sm:inline-block">blink.ino</span>
-               <button 
-                 onClick={handleRunCode}
-                 disabled={isRunning}
-                 className="flex items-center gap-2 bg-[#6BCB77] text-black px-3 py-1.5 rounded font-black text-xs uppercase hover:bg-green-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed border-2 border-black shadow-[2px_2px_0px_0px_rgba(255,255,255,0.2)] active:translate-y-[1px] active:shadow-none"
-               >
-                 <Play className="w-3 h-3 fill-black" /> {isRunning ? 'Running...' : 'Show simulated upload'}
-               </button>
-             </div>
-          </div>
-          
-          {/* Code Area */}
-          <div className="p-4 overflow-x-auto border-b-4 border-black font-mono text-sm leading-relaxed bg-[#1A1A1A] relative">
-            <div className="flex">
-              <div className="text-gray-600 text-right select-none pr-4 border-r-2 border-gray-800 flex flex-col mr-4">
-                {Array.from({ length: 18 }).map((_, i) => (
-                  <span key={i + 1}>{i + 1}</span>
-                ))}
-              </div>
-              <div className="flex-1">
-                <pre className="m-0 p-0 overflow-visible"><span className="text-gray-500">// Setup runs once when you power on the Arduino</span>
-<span className="text-[#FF6B6B]">void</span> <span className="text-[#4D96FF]">setup</span>() {'{'}
-  <span className="text-gray-500">// Tell Pin 13 to act as an OUTPUT (sending electricity out)</span>
-  <span className="text-[#FFD700]">pinMode</span>(<span className="text-purple-400">13</span>, <span className="text-[#6BCB77]">OUTPUT</span>);
-{'}'}
-
-<span className="text-gray-500">// Loop runs over and over forever</span>
-<span className="text-[#FF6B6B]">void</span> <span className="text-[#4D96FF]">loop</span>() {'{'}
-  <span className="text-gray-500">// Turn LED ON (HIGH = full voltage)</span>
-  <span className="text-[#FFD700]">digitalWrite</span>(<span className="text-purple-400">13</span>, <span className="text-[#6BCB77]">HIGH</span>);
-  <span className="text-gray-500">// Wait for 1000 milliseconds (1 full second)</span>
-  <span className="text-[#FFD700]">delay</span>(<span className="text-purple-400">1000</span>);
-  
-  <span className="text-gray-500">// Turn LED OFF (LOW = 0 voltage)</span>
-  <span className="text-[#FFD700]">digitalWrite</span>(<span className="text-purple-400">13</span>, <span className="text-[#6BCB77]">LOW</span>);
-  <span className="text-gray-500">// Wait another second before repeating</span>
-  <span className="text-[#FFD700]">delay</span>(<span className="text-purple-400">1000</span>);
-{'}'}</pre>
-              </div>
-            </div>
-          </div>
-
-          {/* Terminal Area */}
-          <div className="bg-black p-4 font-mono text-xs h-48 overflow-y-auto">
-            <div className="flex items-center gap-2 text-gray-500 mb-3 border-b border-gray-800 pb-2">
-              <Terminal className="w-4 h-4" />
-              <span className="uppercase font-bold tracking-widest text-[10px]">Simulated Terminal Output</span>
-            </div>
-            {terminalOutput.length === 0 ? (
-              <div className="text-gray-600 flex items-center h-full justify-center pb-8 opacity-50">
-                This is a scripted demonstration, not a compiler or upload. Use Arduino IDE, select Uno and the correct port, and upload the sketch to real hardware.
-              </div>
-            ) : (
-              <div className="flex flex-col gap-1.5">
-                {terminalOutput.map((line, idx) => (
-                  <div key={idx} className={`${line.includes('Error') ? 'text-red-400' : line.includes('successful') || line.includes('blinking') ? 'text-[#6BCB77]' : 'text-gray-300'}`}>
-                    {line}
-                  </div>
-                ))}
-                {isRunning && <div className="text-gray-500 animate-pulse mt-1">_</div>}
-              </div>
-            )}
-          </div>
-        </div>
+        <CircuitDiagram number={1} connections={circuits[1]}/>
+        <CodeBlock code={codeChapter1} downloadHref="/sketches/chapter1/chapter1.ino" />
+        <p className="font-medium">This page cannot upload to your board. Open the downloaded sketch in Arduino IDE, select Uno and the correct port, then upload.</p>
       </section>
 
       {/* Exercises */}
