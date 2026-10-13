@@ -263,8 +263,8 @@ export function Chapter3({ onBack }: Chapter3Props) {
           <div>
             <h3 className="text-xl font-black mb-2 uppercase text-blue-600">Assignment 2: Code Modifications</h3>
             <ul className="list-disc list-inside font-medium space-y-1">
-              <li><strong>Headlights:</strong> Sketch a pin plan first: this car already uses six pins. Use current-limiting resistors and avoid boot pins; do not connect extra parts until your instructor checks the plan.</li>
-              <li><strong>Horn:</strong> Plan a safe unused pin or I/O expansion and check buzzer current. This is a design exercise, not a drop-in wiring instruction.</li>
+              <li><strong>Headlights:</strong> Add two LEDs to the front of the car and a virtual Switch in Blynk. (Each LED needs its own 220&Omega; resistor. This car already uses six pins and some NodeMCU pins affect boot, so sketch your pin plan and have your instructor check it before wiring.)</li>
+              <li><strong>Horn:</strong> Connect a piezo buzzer and add a push-button widget to honk. (Use a free pin from your plan and a small buzzer; ask your instructor to check the wiring first.)</li>
               <li><strong>Speed Limits:</strong> Modify the code so reversing automatically halves the speed.</li>
             </ul>
           </div>
