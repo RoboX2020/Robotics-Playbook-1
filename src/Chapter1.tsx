@@ -23,7 +23,7 @@ export function Chapter1({ onBack }: Chapter1Props) {
     }, 2000);
 
     setTimeout(() => {
-      setTerminalOutput(prev => [...prev, 'Upload successful!', 'avrdude done.  Thank you.', '', 'LED is now blinking! ⚡']);
+      setTerminalOutput(prev => [...prev, 'SIMULATION ONLY: upload example complete.', 'avrdude done.  Thank you.', '', 'A real LED only blinks after an actual hardware upload.']);
       setIsRunning(false);
     }, 3500);
   };
@@ -69,7 +69,7 @@ export function Chapter1({ onBack }: Chapter1Props) {
               <span className="text-3xl">🌊</span>
               <div>
                 <strong className="text-xl block">Current (I)</strong>
-                <span>The actual flow of tiny electrons moving through the wires. Measured in Amps.</span>
+                <span>The rate of electric charge flow, measured in amps. Conventional current points opposite to electron motion in metal wires.</span>
               </div>
             </li>
             <li className="flex items-start gap-4 bg-white p-4 border-4 border-black rounded-xl">
@@ -154,14 +154,14 @@ export function Chapter1({ onBack }: Chapter1Props) {
 
           <div className="bg-white p-6 border-4 border-black rounded-xl border-dashed">
             <h4 className="font-bold text-xl mb-2">Why a 220Ω Resistor?</h4>
-            <p className="mb-4">Our Arduino supplies <strong>5V</strong>. A typical red LED needs about <strong>2V</strong> and likes a current of <strong>0.02A</strong> (20mA).</p>
+            <p className="mb-4">Our Arduino supplies <strong>5V</strong>. A typical red LED needs about <strong>2V</strong> and has a datasheet current limit. Using <strong>0.02A</strong> (20mA) here is an example, not a target for every LED.</p>
             <div className="font-mono bg-gray-100 p-4 rounded-lg border-2 border-black">
               R = (Supply Voltage - LED Voltage) / Current<br/>
               R = (5V - 2V) / 0.02A<br/>
               R = 3V / 0.02A<br/>
               R = 150 Ohms
             </div>
-            <p className="mt-4 font-bold text-green-700">We use 220Ω because it's a common standard size and provides a safe buffer!</p>
+            <p className="mt-4 font-bold text-green-700">At an assumed 2V LED drop, 220Ω gives about 13.6mA: (5 - 2) / 220. Check the LED datasheet and the Uno R3 20mA-per-pin rating. A 330Ω or 1kΩ resistor makes a lower-current first test.</p>
           </div>
         </div>
       </section>
@@ -172,10 +172,10 @@ export function Chapter1({ onBack }: Chapter1Props) {
           <span className="text-2xl">🔌</span> The Wiring Diagram
         </h2>
         <div className="doodle-card p-6 bg-white shadow-[8px_8px_0px_0px_rgba(255,215,0,1)]">
-          <p className="text-lg font-bold mb-4">Follow these steps carefully!</p>
+          <p className="text-lg font-bold mb-4">Disconnect USB before wiring. Verify the LED polarity and breadboard connections before powering up.</p>
           <ol className="list-decimal pl-6 space-y-3 font-medium text-lg mb-8">
             <li>Connect a jumper wire from Arduino <strong>GND</strong> to the negative (-) rail of the breadboard.</li>
-            <li>Place the LED on the breadboard. Note: The longer leg is Positive (Anode), the shorter is Negative (Cathode).</li>
+            <li>Place the LED on the breadboard. Note: For an uncut LED, the longer leg is usually anode; the flat edge usually marks cathode. Check the datasheet if the legs were cut.</li>
             <li>Connect the <strong>220Ω Resistor</strong> from the negative (-) rail to the shorter leg of the LED.</li>
             <li>Connect a jumper wire from Arduino <strong>Pin 13</strong> to the longer leg of the LED.</li>
           </ol>
@@ -199,7 +199,7 @@ export function Chapter1({ onBack }: Chapter1Props) {
                {/* LED */}
                <circle cx="310" cy="70" r="15" fill="#ef4444" stroke="#000" strokeWidth="4" />
                <path d="M300 85 L290 120" stroke="#000" strokeWidth="4" fill="none" />
-               <path d="M320 85 L330 110" stroke="#000" strokeWidth="4" fill="none" />
+               <path d="M320 85 L330 130" stroke="#000" strokeWidth="4" fill="none" />
                
                {/* Resistor */}
                <path d="M250 130 L270 130 L275 120 L285 140 L295 120 L305 140 L310 130 L330 130" stroke="#ca8a04" strokeWidth="4" fill="none" strokeLinejoin="round" />
@@ -241,7 +241,7 @@ export function Chapter1({ onBack }: Chapter1Props) {
                  disabled={isRunning}
                  className="flex items-center gap-2 bg-[#6BCB77] text-black px-3 py-1.5 rounded font-black text-xs uppercase hover:bg-green-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed border-2 border-black shadow-[2px_2px_0px_0px_rgba(255,255,255,0.2)] active:translate-y-[1px] active:shadow-none"
                >
-                 <Play className="w-3 h-3 fill-black" /> {isRunning ? 'Running...' : 'Run / Upload'}
+                 <Play className="w-3 h-3 fill-black" /> {isRunning ? 'Running...' : 'Show simulated upload'}
                </button>
              </div>
           </div>
@@ -281,11 +281,11 @@ export function Chapter1({ onBack }: Chapter1Props) {
           <div className="bg-black p-4 font-mono text-xs h-48 overflow-y-auto">
             <div className="flex items-center gap-2 text-gray-500 mb-3 border-b border-gray-800 pb-2">
               <Terminal className="w-4 h-4" />
-              <span className="uppercase font-bold tracking-widest text-[10px]">Terminal Output</span>
+              <span className="uppercase font-bold tracking-widest text-[10px]">Simulated Terminal Output</span>
             </div>
             {terminalOutput.length === 0 ? (
               <div className="text-gray-600 flex items-center h-full justify-center pb-8 opacity-50">
-                Click "Run / Upload" to simulate compiling and flashing the Arduino.
+                This is a scripted demonstration, not a compiler or upload. Use Arduino IDE, select Uno and the correct port, and upload the sketch to real hardware.
               </div>
             ) : (
               <div className="flex flex-col gap-1.5">
