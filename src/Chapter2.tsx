@@ -1,32 +1,27 @@
+import { CircuitDiagram } from './CircuitDiagram';
+import { circuits } from './circuits';
 import React, { useState } from 'react';
 import { ArrowLeft, Eye, Cpu, Radio, RotateCw, Code, CheckSquare, Play, Terminal, AlertTriangle, Wrench, ShieldCheck, HelpCircle, Cable, Zap } from 'lucide-react';
 import { CodeBlock } from './CodeBlock';
 
-const codeChapter2 = `#include <Servo.h>
-#define Servopin 3
-#define Sensorpin 2
-
+export const codeChapter2 = `#include <Servo.h>
+const byte Servopin = 9;
+const byte Sensorpin = 2;
+const byte objectDetectedState = LOW; // Test your module; use HIGH if inverted.
+const int closedAngle = 20; // Calibrate with the horn detached first.
+const int openAngle = 90;
 Servo gateServo;
-
 void setup() {
   Serial.begin(9600);
-  gateServo.attach(Servopin);
   pinMode(Sensorpin, INPUT);
-  gateServo.write(160);
+  gateServo.attach(Servopin);
+  gateServo.write(closedAngle);
 }
-
 void loop() {
-  bool value = digitalRead(Sensorpin);
-  Serial.println(value);
-
-  if (value == 0) {
-    gateServo.write(90);
-    delay(5);
-    gateServo.write(160);
-    delay(5);
-  } else {
-    gateServo.write(160);
-  }
+  bool detected = digitalRead(Sensorpin) == objectDetectedState;
+  Serial.println(detected ? "object" : "clear");
+  gateServo.write(detected ? openAngle : closedAngle);
+  delay(50); // Sample interval, not a one-second open timer.
 }`;
 
 interface Chapter2Props {
@@ -51,7 +46,7 @@ export function Chapter2({ onBack }: Chapter2Props) {
     }, 2000);
 
     setTimeout(() => {
-      setTerminalOutput(prev => [...prev, 'Upload successful!', 'avrdude done.  Thank you.', '', '🚧 Gate system ready — wave your hand in front of the sensor!']);
+      setTerminalOutput(prev => [...prev, 'Upload successful!', 'avrdude done.  Thank you.', '', '🚧 Gate system ready  -  wave your hand in front of the sensor!']);
       setIsRunning(false);
     }, 3500);
   };
@@ -72,7 +67,7 @@ export function Chapter2({ onBack }: Chapter2Props) {
         </div>
         <h1 className="text-4xl md:text-5xl font-black mb-4 uppercase underline decoration-[#4D96FF]">Sense the World! 👁️</h1>
         <p className="text-lg font-bold">
-          Time to give your robot a superpower — the ability to <em>see</em>! You'll build an automatic gate that opens
+          Time to give your robot a superpower  -  the ability to <em>see</em>! You'll build an automatic gate that opens
           when an object approaches and closes when it leaves. Along the way you'll learn how a robot reads an input,
           makes a decision, and controls an output.
         </p>
@@ -126,7 +121,7 @@ export function Chapter2({ onBack }: Chapter2Props) {
               <span className="text-3xl">⚙️</span>
               <div>
                 <strong className="text-xl block">Servo Motor (SG90)</strong>
-                <span>A motor that can move to a chosen angle, usually 0° to 180°. It has three wires: <strong>power</strong> (red), <strong>ground</strong> (brown/black), and <strong>signal</strong> (orange/yellow).</span>
+                <span>A motor that can move to a chosen angle, within its model-specific range; calibrate without forcing the stops. It has three wires: <strong>power</strong> (red), <strong>ground</strong> (brown/black), and <strong>signal</strong> (orange/yellow).</span>
               </div>
             </li>
             <li className="flex items-start gap-4 bg-white p-4 border-4 border-black rounded-xl">
@@ -159,7 +154,7 @@ export function Chapter2({ onBack }: Chapter2Props) {
             </div>
             <div>
               <h3 className="font-bold text-xl">Arduino Uno R3</h3>
-              <p className="text-sm font-medium">Main controller board + USB cable.</p>
+              <p className="text-sm font-medium">Main controller board + USB cable. Also use a regulated 5V servo supply rated for stall current.</p>
             </div>
           </div>
 
@@ -218,9 +213,9 @@ export function Chapter2({ onBack }: Chapter2Props) {
                   ['IR Sensor VCC', '5V', 'Provides power to the IR sensor'],
                   ['IR Sensor GND', 'GND', 'Completes the circuit, shares ground'],
                   ['IR Sensor OUT', 'Digital Pin 2', 'Sends HIGH/LOW reading to Arduino'],
-                  ['Servo Red Wire', '5V', 'Provides servo power (SG90)'],
-                  ['Servo Brown/Black', 'GND', 'Servo ground — must connect to Arduino GND'],
-                  ['Servo Orange/Yellow', 'Digital Pin 3', 'Receives the servo control signal'],
+                  ['Servo Red Wire', 'External regulated 5V +', 'Supply rated for servo stall current'],
+                  ['Servo Brown/Black', 'GND', 'Servo ground  -  must connect to Arduino GND'],
+                  ['Servo Orange/Yellow', 'Digital Pin 9', 'Receives the servo control signal'],
                 ].map(([terminal, pin, desc], i) => (
                   <tr key={i} className={`border-t-2 border-black ${i % 2 === 0 ? 'bg-blue-50' : 'bg-white'}`}>
                     <td className="p-3 font-bold">{terminal}</td>
@@ -234,11 +229,11 @@ export function Chapter2({ onBack }: Chapter2Props) {
 
           {/* CIRCUIT DIAGRAM */}
           <div className="bg-white border-4 border-black rounded-xl p-6 md:p-8 relative flex items-center justify-center">
-            <img 
-              src="/chapter2-diagram.png" 
-              alt="Circuit Diagram" 
-              className="w-full max-w-2xl rounded-xl border-4 border-black"
-            />
+            <div className="w-full font-mono text-sm space-y-3" role="img" aria-label="Gate connections">
+              <p>Uno D2 → sensor OUT; Uno 5V → sensor VCC</p><p>Uno D9 → servo signal</p>
+              <p>External regulated 5V + → servo red</p><p>External supply - → servo GND AND Uno GND AND sensor GND</p>
+              <p>USB → Uno. Do not join external supply + to Uno 5V.</p>
+            </div>
           </div>
         </div>
       </section>
@@ -251,13 +246,13 @@ export function Chapter2({ onBack }: Chapter2Props) {
         <div className="doodle-card p-6 bg-[#FFF9DB] shadow-[8px_8px_0px_0px_rgba(255,215,0,1)]">
           <ul className="space-y-3">
             {[
-              { emoji: '⏚', text: 'Common grounding is required — Arduino GND, IR sensor GND, and servo GND must all connect together.' },
+              { emoji: '⏚', text: 'Common grounding is required  -  Arduino GND, IR sensor GND, and servo GND must all connect together.' },
               { emoji: '🔍', text: 'Check terminals before powering: VCC → 5V, GND → GND, OUT/SIG → digital pin.' },
               { emoji: '🚫', text: 'Do NOT connect VCC directly to GND. That creates a short circuit and can damage your board!' },
-              { emoji: '🔌', text: 'Small SG90 servos can run from Arduino 5V for a demo. Larger servos need a separate 5V supply.' },
+              { emoji: '🔌', text: 'Use an external regulated 5V supply rated for servo stall current. Do not rely on Uno USB power or an I/O pin to power the servo.' },
               { emoji: '🔗', text: 'If using a separate servo supply, connect supply negative to both servo GND and Arduino GND.' },
-              { emoji: '📌', text: 'Pin 9 is used for the servo signal because it supports PWM and is common in servo examples.' },
-              { emoji: '🔧', text: 'The IR sensor may have a small potentiometer screw — turning it adjusts detection distance.' },
+              { emoji: '📌', text: 'The sketch and wiring both use pin 9. Servo.h generates timed control pulses; it does not require a hardware PWM pin.' },
+              { emoji: '🔧', text: 'The IR sensor may have a small potentiometer screw  -  turning it adjusts detection distance.' },
             ].map((point, i) => (
               <li key={i} className="flex items-start gap-3 bg-white p-3 border-4 border-black rounded-xl">
                 <span className="text-2xl shrink-0">{point.emoji}</span>
@@ -282,7 +277,7 @@ export function Chapter2({ onBack }: Chapter2Props) {
           </a>
         </div>
 
-        <CodeBlock code={codeChapter2} />
+        <CircuitDiagram number={2} connections={circuits[2]}/><CodeBlock code={codeChapter2} downloadHref="/sketches/chapter2/chapter2.ino" />
       </section>
 
       {/* ───────── HOW THE CODE WORKS ───────── */}
@@ -297,11 +292,11 @@ export function Chapter2({ onBack }: Chapter2Props) {
           <ol className="list-decimal pl-6 space-y-3 font-medium text-lg">
             <li>The <code className="bg-black text-white px-2 py-0.5 rounded text-sm">Servo.h</code> library is included so Arduino can control the servo easily.</li>
             <li>IR sensor OUT → <strong>digital pin 2</strong>. Servo signal → <strong>digital pin 9</strong>.</li>
-            <li>In <code className="bg-black text-white px-2 py-0.5 rounded text-sm">setup()</code>, pin 2 is set as INPUT, the servo attaches to pin 9, and the gate starts closed (0°).</li>
+            <li>In <code className="bg-black text-white px-2 py-0.5 rounded text-sm">setup()</code>, pin 2 is set as INPUT, the servo attaches to pin 9, and the gate starts at closedAngle (20° here). Calibrate angles with the horn detached to avoid forcing the mechanism.</li>
             <li>In <code className="bg-black text-white px-2 py-0.5 rounded text-sm">loop()</code>, Arduino reads the sensor value every cycle.</li>
             <li>If an object is detected → servo moves to <strong>90°</strong> (gate opens).</li>
-            <li>If no object → servo moves back to <strong>0°</strong> (gate closes).</li>
-            <li>A small 50ms delay keeps readings stable.</li>
+            <li>If no object → servo moves back to <strong>closedAngle</strong> (gate closes).</li>
+            <li>The 50ms delay sets a sampling interval, not filtering. Calibrate the IR module and test it in the lighting used in class.</li>
           </ol>
         </div>
       </section>
@@ -317,10 +312,10 @@ export function Chapter2({ onBack }: Chapter2Props) {
             <li>Connect IR sensor VCC → Arduino <strong>5V</strong>.</li>
             <li>Connect IR sensor GND → Arduino <strong>GND</strong>.</li>
             <li>Connect IR sensor OUT → Arduino <strong>digital pin 2</strong>.</li>
-            <li>Connect servo red wire → Arduino <strong>5V</strong>.</li>
-            <li>Connect servo brown/black wire → Arduino <strong>GND</strong>.</li>
+            <li>Connect servo red wire → external regulated <strong>5V positive</strong>. Keep external supply positive disconnected from Uno 5V while USB powers the Uno.</li>
+            <li>Connect servo brown/black wire → external supply negative AND Arduino <strong>GND</strong>.</li>
             <li>Connect servo orange/yellow wire → Arduino <strong>digital pin 9</strong>.</li>
-            <li>Attach the servo horn and optional cardboard gate arm.</li>
+            <li>Upload and test the servo angles with its horn detached first. Switch off both supplies before attaching a lightweight cardboard arm; leave room for free movement.</li>
             <li>Connect the Arduino to computer via USB.</li>
             <li>Open Arduino IDE, paste the code, select <strong>Arduino Uno</strong> and the correct port, then upload.</li>
             <li>Move an object in front of the IR sensor and <strong>observe the servo motion!</strong> 🎉</li>
@@ -337,8 +332,8 @@ export function Chapter2({ onBack }: Chapter2Props) {
           <div className="flex items-start gap-4">
             <span className="text-4xl">🚧</span>
             <div>
-              <p className="font-bold text-lg mb-2">When no object is in front of the IR sensor, the servo stays at 0° (gate closed).</p>
-              <p className="font-bold text-lg mb-2">When an object is detected, the servo turns to 90° for about one second (gate opens).</p>
+              <p className="font-bold text-lg mb-2">When no object is in front of the IR sensor, the servo stays at closedAngle (20° here).</p>
+              <p className="font-bold text-lg mb-2">When an object is detected, the servo turns to openAngle (90° here) and stays open while an object is detected.</p>
               <p className="font-medium text-gray-700">If the sensor behaves the opposite way, change <code className="bg-black text-white px-2 py-0.5 rounded text-sm">objectDetectedState</code> from <code className="bg-black text-white px-2 py-0.5 rounded text-sm">LOW</code> to <code className="bg-black text-white px-2 py-0.5 rounded text-sm">HIGH</code> in the code.</p>
             </div>
           </div>
@@ -362,7 +357,7 @@ export function Chapter2({ onBack }: Chapter2Props) {
               </thead>
               <tbody>
                 {[
-                  ['Servo does not move', 'Wrong power/ground/signal wire', 'Check red→5V, brown/black→GND, signal→pin 9'],
+                  ['Servo does not move', 'Wrong power/ground/signal wire', 'Check red→external regulated 5V, common ground, signal→pin 9'],
                   ['Sensor light changes but no servo reaction', 'OUT wire or code pin mismatch', 'Verify IR OUT goes to digital pin 2'],
                   ['Servo jitters or Arduino resets', 'Servo drawing too much current', 'Use separate 5V supply; connect grounds together'],
                   ['Servo moves opposite of expected', 'Sensor output logic is reversed', 'Change objectDetectedState from LOW to HIGH'],
@@ -390,7 +385,7 @@ export function Chapter2({ onBack }: Chapter2Props) {
           <ul className="space-y-3">
             {[
               '✅ Always check wiring before plugging in USB power.',
-              '✅ Keep metal objects away from exposed pins.',
+              '✅ Keep fingers clear of the gate and metal away from exposed pins. This is a tabletop model, not a safety-rated real gate.',
               '✅ Do not force the servo horn by hand while powered.',
               '✅ Disconnect power before changing wires.',
               '✅ Use colour coding: red for 5V, black/brown for GND, another colour for signal.',
