@@ -7,6 +7,7 @@ interface DashboardProps {
 
 export function Dashboard({ onSelectChapter }: DashboardProps) {
   const chapters = [
+    {id:'chapter-0',title:'Chapter 0: Getting started',description:'Tools, boards, safe wiring, inputs and outputs. Start here.',icon:<BookOpen className="w-12 h-12 text-yellow-500"/>,color:'bg-yellow-100',status:'Start Now'},
     {
       id: 'chapter-1',
       title: 'Chapter 1: The Spark of Life',
@@ -30,7 +31,15 @@ export function Dashboard({ onSelectChapter }: DashboardProps) {
       icon: <Star className="w-12 h-12 text-pink-500" />,
       color: 'bg-pink-100',
       status: 'Start Now',
-    }
+    },
+    {id:'chapter-4',title:'Chapter 4: Chase the Light!',description:'Compare two light sensors and steer a servo pointer.',icon:<Zap className="w-12 h-12 text-green-600"/>,color:'bg-green-100',status:'Start Now'},
+    {id:'chapter-5',title:'Chapter 5: Look Around!',description:'Control a two-servo pan/tilt head with an analog joystick.',icon:<Zap className="w-12 h-12 text-green-600"/>,color:'bg-green-100',status:'Start Now'},
+    {id:'chapter-6',title:'Chapter 6: Beat the Blink!',description:'Build a reaction-time game with a debounced button.',icon:<Zap className="w-12 h-12 text-green-600"/>,color:'bg-green-100',status:'Start Now'},
+    {id:'chapter-7',title:'Chapter 7: Measure the Gap!',description:'Measure distance and build a tabletop parking alarm.',icon:<Zap className="w-12 h-12 text-green-600"/>,color:'bg-green-100',status:'Start Now'},
+    {id:'chapter-8',title:'Chapter 8: Follow the Trail!',description:'Calibrate two reflectance sensors for a simple autonomous car.',icon:<Settings className="w-12 h-12 text-blue-500"/>,color:'bg-blue-100',status:'Start Now'},
+    {id:'chapter-9',title:'Chapter 9: Stop Before the Wall!',description:'Combine distance measurement with motor control.',icon:<Settings className="w-12 h-12 text-blue-500"/>,color:'bg-blue-100',status:'Start Now'},
+    {id:'chapter-10',title:'Chapter 10: Give It a Grip!',description:'Build a lightweight servo gripper with safe travel limits.',icon:<Settings className="w-12 h-12 text-blue-500"/>,color:'bg-blue-100',status:'Start Now'},
+    {id:'chapter-11',title:'Chapter 11: Cool It Down!',description:'Read temperature and safely switch a low-voltage fan.',icon:<Settings className="w-12 h-12 text-blue-500"/>,color:'bg-blue-100',status:'Start Now'}
   ];
 
   return (
@@ -38,7 +47,7 @@ export function Dashboard({ onSelectChapter }: DashboardProps) {
       <header className="mb-12 flex flex-col items-center gap-4 text-center">
         <div className="flex items-center justify-center gap-4">
           <div className="w-12 h-12 border-4 border-black rounded-lg bg-[#FFD700] flex items-center justify-center font-black text-3xl rotate-3">R</div>
-          <h1 className="text-5xl md:text-6xl font-black tracking-tight uppercase">
+          <h1 className="text-3xl sm:text-5xl md:text-6xl font-black tracking-tight uppercase">
             Robotics Playbook
           </h1>
         </div>
@@ -86,7 +95,7 @@ export function Dashboard({ onSelectChapter }: DashboardProps) {
          </div>
          <div>
             <h3 className="text-2xl font-black mb-2 uppercase">Welcome to the Lab!</h3>
-            <p className="text-sm font-bold">Grab your breadboard, some jumper wires, and let's get building. This playbook is designed to be messy, fun, and totally hands-on. Don't worry if things don't work on the first try—that's how we learn!</p>
+            <p className="text-sm font-bold">Grab your breadboard, some jumper wires, and let's get building. This playbook is designed to be messy, fun, and totally hands-on. Don't worry if things don't work on the first try - that's how we learn!</p>
          </div>
       </div>
     </div>
