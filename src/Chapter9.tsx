@@ -1,0 +1,20 @@
+import {ProjectChapter,type Lesson} from './ProjectChapter';
+import {motorParts,motorWiring,motorSafety,motorCode} from './motorLesson';
+export const lesson:Lesson={number:9,title:'Stop Before the Wall!',intro:'Add a front ultrasonic sensor to the Uno car. Move slowly when the path is measured clear; stop on a nearby obstacle or missing echo. This is an obstacle-stop model, not full obstacle avoidance.',objectives:['Combine numeric sensing with motor control.','Fail stopped on unknown input.','Use hysteresis and several clear samples before restarting.'],parts:[...motorParts,'Standard 5V HC-SR04 ultrasonic module and a rigid forward-facing mount.'],principles:['Use the same time-of-flight conversion as chapter 7. Missing or out-of-range echo is UNKNOWN and stops the car.','Below 25cm the robot stops. It restarts only after three valid readings above 35cm. The middle band preserves the previous state.','A reading is not proof of a safe path. Angled, soft, thin or side objects can be missed. Sensor delay and motor inertia affect stopping distance.','Start slowly with wheels lifted. Thresholds are teaching values and must be checked at the actual speed; do not use near people.'],wiring:[...motorWiring,'HC-SR04 VCC→Uno 5V; GND→common GND; TRIG→D2; ECHO→D4. This 5V echo is for Uno, not direct 3.3V logic.'],procedure:['Upload with RUN_MOTORS=false and motor power OFF. Open Serial Monitor at 9600 and test a flat card at 10cm, 30cm and 50cm.','Verify no echo stops. With wheels lifted, use TEST_FORWARD=true only to verify motor direction, then turn it false again with power off.','Enable RUN_MOTORS. With wheels lifted confirm nearby card stops, and three clear readings above 35cm allow forward.','Run at low speed on a clear floor towards a large cardboard wall. Keep the switch in reach. Measure actual stopping distance and increase threshold or reduce speed if needed.'],code:motorCode+`
+const byte trigPin=2,echoPin=4;
+bool clearPath=false;byte clearCount=0;
+void setup(){Serial.begin(9600);setupMotors();pinMode(trigPin,OUTPUT);digitalWrite(trigPin,LOW);pinMode(echoPin,INPUT);}
+void loop(){
+ digitalWrite(trigPin,LOW);delayMicroseconds(2);digitalWrite(trigPin,HIGH);delayMicroseconds(10);digitalWrite(trigPin,LOW);
+ unsigned long us=pulseIn(echoPin,HIGH,30000UL);
+ float cm=us*0.0343f/2.0f;bool valid=us!=0&&cm>=2&&cm<=400;
+ if(!valid||cm<25){clearPath=false;clearCount=0;}
+ else if(cm>35){if(clearCount<3)clearCount++;if(clearCount>=3)clearPath=true;}
+ else clearCount=0;
+ if(valid){Serial.print(cm);Serial.println(" cm");}else Serial.println("UNKNOWN - STOP");
+ if(!RUN_MOTORS)drive(0,0);
+ else if(TEST_FORWARD)drive(1,1); // Wheels-up direction test only; bypasses sensor.
+ else if(clearPath)drive(1,1);else drive(0,0);
+ delay(70);
+}`,expected:['Unknown or close readings disable both enables.','Three consecutive far readings allow motion; hysteresis reduces boundary chatter.','TEST_FORWARD deliberately bypasses the sensor and is only for raised-wheel testing.'],troubleshooting:['Never starts: confirm RUN_MOTORS, three far valid samples, trigger/echo and flat target.','Does not stop on an angled object: the sensor may miss it. Stop manually; this limitation cannot be fixed by pretending the reading is reliable.','Moves backward: repeat raised-wheel motor polarity checks.'],safety:[...motorSafety,'Never rely on this for human or vehicle safety. A motor command can remain active during a measurement for up to its timeout; keep speed low.'],exercises:['Measure stopping distance at two low duty values.','Print clearCount and explain restart delay.','Explain the difference between obstacle-stop and autonomous navigation.'],checks:['Why should missing echo stop?','What are the two distance thresholds?','What can ultrasound miss?','Why must TEST_FORWARD be false for floor use?'],sources:[{title:'HC-SR04 timing sheet',url:'https://cdn.sparkfun.com/datasheets/Sensors/Proximity/HCSR04.pdf'},{title:'ST L298 limits',url:'https://www.st.com/resource/en/datasheet/cd00000240.pdf'}]};
+export function Chapter9({onBack}:{onBack:()=>void}){return <ProjectChapter lesson={lesson} onBack={onBack}/>;}
