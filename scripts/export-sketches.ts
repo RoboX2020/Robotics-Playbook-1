@@ -1,0 +1,15 @@
+import {mkdirSync,writeFileSync} from 'node:fs';
+import {codeChapter1} from '../src/Chapter1';
+import {codeChapter2} from '../src/Chapter2';
+import {codeChapter3} from '../src/Chapter3';
+import {lesson as c4} from '../src/Chapter4';
+import {lesson as c5} from '../src/Chapter5';
+import {lesson as c6} from '../src/Chapter6';
+import {lesson as c7} from '../src/Chapter7';
+import {lesson as c8} from '../src/Chapter8';
+import {lesson as c9} from '../src/Chapter9';
+import {lesson as c10} from '../src/Chapter10';
+import {lesson as c11} from '../src/Chapter11';
+const codes=[codeChapter1,codeChapter2,codeChapter3,c4.code,c5.code,c6.code,c7.code,c8.code,c9.code,c10.code,c11.code];
+codes.forEach((code,i)=>{const name=`chapter${i+1}`,dir=`public/sketches/${name}`;mkdirSync(dir,{recursive:true});writeFileSync(`${dir}/${name}.ino`,code+'\n');});
+console.log('Exported 11 exact displayed sketches; chapter0 has no sketch.');
