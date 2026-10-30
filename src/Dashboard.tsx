@@ -5,6 +5,10 @@ interface DashboardProps {
   onSelectChapter: (chapterId: string) => void;
 }
 
+// ============================================================================
+// Dashboard.tsx - the home screen: the grid of chapter cards. Clicking a card
+// calls onSelectChapter, which App.tsx uses to swap screens.
+// ============================================================================
 export function Dashboard({ onSelectChapter }: DashboardProps) {
   const chapters = [
     {id:'chapter-0',title:'Chapter 0: Getting started',description:'Tools, boards, safe wiring, inputs and outputs. Start here.',icon:<BookOpen className="w-12 h-12 text-yellow-500"/>,color:'bg-yellow-100',status:'Start Now'},

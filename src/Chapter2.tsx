@@ -32,7 +32,12 @@ export function Chapter2({ onBack }: Chapter2Props) {
   const [terminalOutput, setTerminalOutput] = useState<string[]>([]);
   const [isRunning, setIsRunning] = useState(false);
 
+  // The "Run" button fakes compiling and uploading the Arduino sketch: it
+  // reveals realistic terminal lines on a timed schedule so students see what
+  // the real upload sequence LOOKS like before trying it on hardware. Nothing
+  // is actually compiled here - it is a rehearsal, not a toolchain.
   const handleRunCode = () => {
+    // Ignore double-clicks while a run is playing.
     if (isRunning) return;
     setIsRunning(true);
     setTerminalOutput(['$ arduino-cli compile --fqbn arduino:avr:uno auto_gate.ino', 'Compiling sketch...']);

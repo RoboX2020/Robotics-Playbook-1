@@ -15,7 +15,14 @@ import { Chapter9 } from './Chapter9';
 import { Chapter10 } from './Chapter10';
 import { Chapter11 } from './Chapter11';
 
+// ============================================================================
+// App.tsx - the table of contents. The whole app is one page: this component
+// remembers which view is showing ('dashboard' or one of the chapters) and
+// renders exactly that one. Every chapter gets an onBack callback that flips
+// the view back to the dashboard - there is no browser routing, just state.
+// ============================================================================
 export default function App() {
+  // Which screen is on: starts at the dashboard; setCurrentView swaps screens.
   const [currentView, setCurrentView] = useState<'dashboard' | 'chapter-1' | 'chapter-2' | 'chapter-3' | 'chapter-4' | 'chapter-5' | 'chapter-6' | 'chapter-7' | 'chapter-0' | 'chapter-8' | 'chapter-9' | 'chapter-10' | 'chapter-11'>('dashboard');
 
   return (

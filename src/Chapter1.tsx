@@ -18,6 +18,12 @@ void loop() {
   delay(1000);            // Wait another second before repeating
 }`;
 
+// ============================================================================
+// Chapter1.tsx - "The Spark of Life": the first lesson (voltage, current,
+// resistance) and the classic blink-an-LED Arduino sketch. This file is mostly
+// lesson content (styled text, diagrams, and the sample code shown below in
+// codeChapter1); there is no app logic here beyond the Back button.
+// ============================================================================
 interface Chapter1Props {
   onBack: () => void;
 }

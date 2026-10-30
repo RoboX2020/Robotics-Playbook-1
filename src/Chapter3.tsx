@@ -74,6 +74,11 @@ interface Chapter3Props {
   onBack: () => void;
 }
 
+// ============================================================================
+// Chapter3.tsx - "Move It!": the motors lesson (servos, drivers, power).
+// Like Chapter 1, this is lesson content: styled text, diagrams and sample
+// code - no app logic beyond the Back button.
+// ============================================================================
 export function Chapter3({ onBack }: Chapter3Props) {
   return (
     <div className="max-w-4xl mx-auto p-4 md:p-8 pb-24">

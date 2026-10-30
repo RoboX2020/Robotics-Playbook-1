@@ -2,6 +2,14 @@ import { CircuitDiagram } from './CircuitDiagram';
 import { circuits } from './circuits';
 import { ArrowLeft } from 'lucide-react';
 import { CodeBlock } from './CodeBlock';
+// ============================================================================
+// ProjectChapter.tsx - one shared template that renders any project-style
+// chapter (chapters 0 and 4-11). Each of those chapter files just fills in a
+// `Lesson` data object (title, parts list, wiring steps, code, checks...) and
+// hands it here; this component turns the data into the styled page. Keeping
+// the layout in one place means every chapter looks and reads the same.
+// ============================================================================
+// The Lesson type: every field a chapter page needs, as plain data.
 export type Lesson = {number:number;title:string;intro:string;objectives:string[];parts:string[];principles:string[];wiring:string[];procedure:string[];code:string;expected:string[];troubleshooting:string[];safety:string[];exercises:string[];checks:string[];sources:{title:string;url:string}[]};
 export function ProjectChapter({lesson:l,onBack}:{lesson:Lesson;onBack:()=>void}) {
  const sections:[string,string[]][]=[['Learning objectives',l.objectives],['Parts list',l.parts],['How it works',l.principles],['Wiring diagram and connections',l.wiring],['Lab procedure',l.procedure]];
