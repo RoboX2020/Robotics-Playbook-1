@@ -36,6 +36,9 @@ export function Chapter2({ onBack }: Chapter2Props) {
   // reveals realistic terminal lines on a timed schedule so students see what
   // the real upload sequence LOOKS like before trying it on hardware. Nothing
   // is actually compiled here - it is a rehearsal, not a toolchain.
+  // A make-believe compile-and-upload: plays the terminal output a real
+  // Arduino upload would show, so learners know what success looks like
+  // before they try it on real hardware.
   const handleRunCode = () => {
     // Ignore double-clicks while a run is playing.
     if (isRunning) return;
